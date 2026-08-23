@@ -10,6 +10,7 @@ import com.example.trailblazer.repository.CartRepository;
 import com.example.trailblazer.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -63,14 +64,24 @@ public class CartService {
 
         List<CartItemResponse> itemResponses = cart.getItems()
                                                    .stream()
-                                                   .map(item -> new CartItemResponse(
-                                                           item.getProduct()
-                                                               .getId(), item.getProduct()
-                                                                             .getName(), item.getQuantity(), item.getProduct()
-                                                                                                                 .getPrice()
-                                                   ))
+                                                   .map(item -> {
+                                                       BigDecimal totalUnitPrice = item.getProduct()
+                                                                                       .getPrice()
+                                                                                       .multiply(BigDecimal.valueOf(item.getQuantity()));
+
+                                                       return new CartItemResponse(
+                                                               item.getProduct()
+                                                                   .getId(), item.getProduct()
+                                                                                 .getName(), item.getQuantity(), item.getProduct()
+                                                                                                                     .getPrice(), totalUnitPrice);
+                                                   })
                                                    .toList();
 
-        return new CartResponse(cart.getId(), itemResponses);
+        BigDecimal grandTotal = itemResponses.stream()
+                                             .map(CartItemResponse::getTotalUnitPrice)
+                                             .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+        return new CartResponse(cart.getId(), grandTotal, itemResponses);
     }
 }

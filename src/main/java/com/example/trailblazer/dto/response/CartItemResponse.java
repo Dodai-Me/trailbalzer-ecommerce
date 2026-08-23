@@ -12,4 +12,5 @@ public class CartItemResponse {
     private final String productName;
     private final Integer quantity;
     private final BigDecimal unitPrice;
+    private final BigDecimal totalUnitPrice;
 }
