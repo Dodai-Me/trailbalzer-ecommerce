@@ -27,27 +27,30 @@ public class Admin {
     @Column(nullable = false)
     private String role = "ROLE_ADMIN";
 
-    public Admin(){
+    public Admin() {
 
     }
 
-    public Admin(String username, String password){
+    public Admin(
+            String username,
+            String password
+    ) {
         this.username = username;
         this.password = password;
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
+        if (this == o) return true;
 
-        if(o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Admin admin = (Admin) o;
         return Objects.equals(id, admin.id) && Objects.equals(username, admin.username);
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(id, username);
     }
 }
