@@ -1,0 +1,22 @@
+package com.example.trailblazer.dto.request;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class AdminSignUpRequest {
+    @NotBlank(message = "Username is required")
+    private String username;
+
+    @NotBlank(message = "Password is required")
+    @Pattern(
+            regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{12,}$",
+            message = "Password must be at least 12 characters long, contain at least one number, one uppercase letter, and one special character."
+    )
+    @Schema(example = "12 characters with at least a special character, number, capital letter")
+    private String password;
+}
