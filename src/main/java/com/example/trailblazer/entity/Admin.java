@@ -1,5 +1,6 @@
 package com.example.trailblazer.entity;
 
+import com.example.trailblazer.entity.contracts.PasswordUpdatable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.util.Objects;
 @Entity(name = "admins")
 @Getter
 @Setter
-public class Admin {
+public class Admin implements PasswordUpdatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -52,5 +53,10 @@ public class Admin {
     @Override
     public int hashCode() {
         return Objects.hash(id, username);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

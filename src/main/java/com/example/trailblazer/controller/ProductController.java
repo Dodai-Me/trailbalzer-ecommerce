@@ -1,6 +1,7 @@
 package com.example.trailblazer.controller;
 
 import com.example.trailblazer.dto.request.ProductRequest;
+import com.example.trailblazer.dto.request.ProductUpdateRequest;
 import com.example.trailblazer.dto.response.ProductResponse;
 import com.example.trailblazer.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,4 +43,25 @@ public class ProductController {
     public ResponseEntity<@NonNull List<ProductResponse>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
+
+    @Operation(summary = "Edits a products", description = "Changes a created products")
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void updateProduct(
+            @PathVariable Long id,
+            @Valid @RequestBody ProductUpdateRequest request
+    ) {
+        productService.updateProduct(id, request);
+        ResponseEntity.noContent()
+                      .build();
+    }
+
+    @Operation(summary = "Deletes a products", description = "Removes a created products permanently")
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<@NonNull String> deleteProduct(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(productService.deleteProduct(id));
+    }
+
 }
