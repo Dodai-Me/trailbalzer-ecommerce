@@ -17,7 +17,7 @@ public class CustomerSignUpRequest {
 
     @NotBlank(message = "Password is required")
     @Pattern(
-            regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{12,}$",
+            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{12,}$",
             message = "Password must be at least 12 characters long, contain at least one number, one uppercase letter, and one special character."
     )
     @Schema(example = "12 characters with at least a special character, number, capital letter")

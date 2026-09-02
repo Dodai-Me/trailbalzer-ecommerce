@@ -6,24 +6,31 @@ import com.example.trailblazer.dto.response.CartResponse;
 import com.example.trailblazer.entity.Cart;
 import com.example.trailblazer.entity.CartItem;
 import com.example.trailblazer.entity.Product;
+import com.example.trailblazer.repository.CartItemRepository;
 import com.example.trailblazer.repository.CartRepository;
 import com.example.trailblazer.repository.ProductRepository;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+    private final CartItemRepository cartItemRepository;
+
 
     public CartService(
             CartRepository cartRepository,
-            ProductRepository productRepository
+            ProductRepository productRepository,
+            CartItemRepository cartItemRepository
     ) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
+        this.cartItemRepository = cartItemRepository;
     }
 
     public String addProductToCart(
@@ -56,6 +63,24 @@ public class CartService {
         cartRepository.save(cart);
 
         return "Product added to cart successfully!";
+    }
+
+    @SneakyThrows
+    public void removeProductFromCart(
+            String email,
+            Long id
+    ) {
+        Cart cart = cartRepository.findByCustomerEmail(email)
+                                  .orElseThrow(() -> new RuntimeException("Cart not found for user: " + email));
+        CartItem cartItem = cartItemRepository.findById(id)
+                                              .orElseThrow(() -> new RuntimeException("Item: " + id + " not found"));
+        if (!cartItem.getCart()
+                     .getId()
+                     .equals(cart.getId())) {
+            throw new AccessDeniedException("You do not have permission to remove this item");
+        }
+
+        cartItemRepository.delete(cartItem);
     }
 
     public CartResponse getUserCart(String email) {

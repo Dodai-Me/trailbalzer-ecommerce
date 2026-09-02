@@ -43,4 +43,17 @@ public class CartController {
         String email = principal.getName();
         return ResponseEntity.ok(cartService.getUserCart(email));
     }
+
+    @Operation(summary = "Deletes an item from cart", description = "Removes an item from a user's cart")
+    @DeleteMapping("/items/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public void removeProductFromCart(
+            Principal principal,
+            @PathVariable Long id
+    ) {
+        String email = principal.getName();
+        cartService.removeProductFromCart(email, id);
+        ResponseEntity.noContent()
+                      .build();
+    }
 }
