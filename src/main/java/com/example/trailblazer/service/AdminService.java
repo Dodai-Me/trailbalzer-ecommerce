@@ -2,7 +2,6 @@ package com.example.trailblazer.service;
 
 import com.example.trailblazer.dto.request.AdminSignUpRequest;
 import com.example.trailblazer.dto.request.ChangePasswordRequest;
-import com.example.trailblazer.dto.response.CartResponse;
 import com.example.trailblazer.dto.response.CustomerResponse;
 import com.example.trailblazer.entity.Admin;
 import com.example.trailblazer.entity.Customer;
