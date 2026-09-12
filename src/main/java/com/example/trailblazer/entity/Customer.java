@@ -30,6 +30,9 @@ public class Customer implements PasswordUpdatable {
     @Column(nullable = false)
     private String role = "ROLE_CUSTOMER";
 
+    @Column(name = "is_suspended", nullable = false)
+    private boolean isSuspended = false;
+
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
 

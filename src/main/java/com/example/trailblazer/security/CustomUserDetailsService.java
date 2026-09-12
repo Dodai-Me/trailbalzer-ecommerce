@@ -18,7 +18,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final AdminRepository adminRepository;
     private final CustomerRepository customerRepository;
 
-    public CustomUserDetailsService(AdminRepository adminRepository, CustomerRepository customerRepository) {
+    public CustomUserDetailsService(
+            AdminRepository adminRepository,
+            CustomerRepository customerRepository
+    ) {
         this.adminRepository = adminRepository;
         this.customerRepository = customerRepository;
     }
@@ -45,6 +48,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                        .username(customer.getEmail())
                        .password(customer.getPassword())
                        .authorities(customer.getRole())
+                       .accountLocked(customer.isSuspended())
                        .build();
         }
 
