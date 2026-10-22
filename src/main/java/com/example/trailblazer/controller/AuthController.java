@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +25,16 @@ public class AuthController {
 
     private final AuthService authService;
     private final LoginRateLimiter rateLimiter;
+    private final AuthenticationManager authenticationManager;
 
     public AuthController(
             AuthService authService,
-            LoginRateLimiter rateLimiter
+            LoginRateLimiter rateLimiter,
+            AuthenticationManager authenticationManager
     ) {
         this.authService = authService;
         this.rateLimiter = rateLimiter;
+        this.authenticationManager = authenticationManager;
     }
 
     @Operation(
@@ -41,6 +46,8 @@ public class AuthController {
             @Valid @RequestBody LoginRequest request,
             HttpServletRequest httpRequest
     ) {
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword()));
 
         String clientIp = httpRequest.getRemoteAddr();
 

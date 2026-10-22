@@ -39,8 +39,8 @@ public class CartService {
     ) {
         Cart cart = cartRepository.findByCustomerEmail(email)
                                   .orElseThrow(() -> new RuntimeException("Cart not found for user: " + email));
-        Product product = productRepository.findById(request.getProduct_id())
-                                           .orElseThrow(() -> new RuntimeException("Product ID: " + request.getProduct_id() + " not found"));
+        Product product = productRepository.findById(request.getProductId())
+                                           .orElseThrow(() -> new RuntimeException("Product ID: " + request.getProductId() + " not found"));
 
         boolean isAlreadyInCart = false;
 

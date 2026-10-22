@@ -51,6 +51,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                                            .getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userIdentifier);
             if (jwtService.isTokenValid(jwt, userDetails)) {
+
+                if (!userDetails.isAccountNonLocked()) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setContentType("application/json");
+                    response.getWriter()
+                            .write("{\"error\": \"Your account has been suspended.\"}");
+                    return;
+                }
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

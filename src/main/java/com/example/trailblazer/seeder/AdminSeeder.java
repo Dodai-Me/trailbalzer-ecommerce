@@ -31,6 +31,7 @@ public class AdminSeeder implements CommandLineRunner {
     public void run(String... args) {
         if (adminRepository.count() == 0) {
             Admin admin = new Admin(defaultAdminUsername, passwordEncoder.encode(defaultAdminPassword));
+            admin.setRole("ROLE_SUPER_ADMIN");
             adminRepository.save(admin);
             System.out.println("No admins found. Default Admin created successfully.");
         }
