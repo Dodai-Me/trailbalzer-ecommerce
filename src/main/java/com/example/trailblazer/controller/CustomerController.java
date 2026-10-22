@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/customer")
 @Tag(name = "Customer Management", description = "Secured endpoints for Customer operations")
@@ -21,12 +23,13 @@ public class CustomerController {
     }
 
     @Operation(summary = "Edits Customer password", description = "Changes the customer password")
-    @PatchMapping("/{email}/change-password")
+    @PatchMapping("/change-password")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<@NonNull String> changeCustomerPassword(
-            @PathVariable String email,
+            Principal principal,
             @Valid @RequestBody ChangePasswordRequest request
     ) {
-        return ResponseEntity.ok(customerService.changeCustomerPassword(email, request));
+        String loggedInCustomerEmail = principal.getName();
+        return ResponseEntity.ok(customerService.changeCustomerPassword(loggedInCustomerEmail, request));
     }
 }
