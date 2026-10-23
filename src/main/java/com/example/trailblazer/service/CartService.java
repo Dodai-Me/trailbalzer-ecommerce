@@ -42,6 +42,9 @@ public class CartService {
         Product product = productRepository.findById(request.getProductId())
                                            .orElseThrow(() -> new RuntimeException("Product ID: " + request.getProductId() + " not found"));
 
+        if (product.isDeleted()) {
+            throw new RuntimeException("This product is no longer available for purchase");
+        }
         boolean isAlreadyInCart = false;
 
         for (CartItem item : cart.getItems()) {
